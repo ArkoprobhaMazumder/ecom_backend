@@ -1,7 +1,11 @@
 import express from 'express';
 import UserController from './user.controller.js';
 
+import signUpValidation from '../../middleware/signUpValidation.js';
+
 const userRouter = express.Router();
 const userController = new UserController();
+
+userRouter.post('/signup', signUpValidation, (req, res, next) => userController.userSignUp(req, res, next));
 
 export default userRouter;

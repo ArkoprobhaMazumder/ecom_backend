@@ -1,11 +1,26 @@
-import { Component } from "react";
+
 import UserModel from "./user.model.js";
 
 
-class UserRepository extends Component{
+class UserRepository{
 
-    async signUp(name,email,password){
+    async signUp(user){
+        try {
+            const newUser = new UserModel(user);
+            return await newUser.save();
+        } catch (error) {
+            console.log("Repo: Error in SignUp", error);
+            throw error;
+        }
+    }
 
+    async checkUserByEmail({ email }) {
+        try {
+            return await UserModel.findOne({ email });
+        } catch (error) {
+            console.log("Repo: Error while checking user by email", error);
+            throw error;
+        }
     }
 }
 
