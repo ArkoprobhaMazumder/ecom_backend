@@ -22,6 +22,16 @@ class UserRepository{
             throw error;
         }
     }
+
+    async singin(user){
+        const { email } = user;
+        try {
+            return await UserModel.findOne({ email });
+        } catch (error) {
+            console.log("Repo: Error in SignIn", error);
+            throw error;
+        }
+    }
 }
 
 export default UserRepository;

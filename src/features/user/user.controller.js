@@ -1,5 +1,7 @@
 
 import UserRepository from "./user.repository.js";
+import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
 
 class UserController {
 
@@ -26,8 +28,27 @@ class UserController {
     }
 
     async userLogin(req, res, next) {
-        const { email, password } = req.body;
+        const { email, password, type='customer' } = req.body;
+        try {
+            const user = await this.userRepository.singin({ email });
+            if (!user) return res.status(400).json({ message: "Invalid Credentials" });
+            else {
+                const validUser= await bcrypt.compare(password, user.password);
+                if(!validUser) return res.status(400).json({ message: "Invalid Credentials" });
+                else if(user.type!==type) return res.status(400).json({ message: `User is not a ${type}` });
+                else{
+                    const token=jwt.sign({ id: user._id, email: user.email, type: user.type },process.env.JWT_SECRET, { expiresIn: '1h' });
+                    return res.status(200).cookie("userToken", token, {
+                        maxAge: 60 * 60 * 1000
+                    }).send({ msg: "Login Successfull", cookie: token });
+                }
+            }
+        } catch (error) {
+            console.log("Controller: Error in Login", error);
+            res.status(500).json({ error: "An error occurred during login controller" });
+        }
     }
+
 
 }
 
