@@ -10,12 +10,12 @@ class UserController {
     }
 
     async userSignUp(req, res, next) {
-        const { name, email, password, type } = req.body;
+        const { userName, email, password, type,name } = req.body;
         try {
             // Check if user with the same email already exists
             const existingUser = await this.userRepository.checkUserByEmail({ email });
             if (existingUser) {
-                return res.status(400).json({ message: "Email already in use" });
+                return res.status(400).json({ message: "Email already in use"});
             }
             else {
                 const user = await this.userRepository.signUp({ name, email, password, type });
