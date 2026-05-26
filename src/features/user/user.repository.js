@@ -32,6 +32,15 @@ class UserRepository{
             throw error;
         }
     }
+
+    async getUserById(id){
+        try{
+            return await UserModel.findById(id);
+        }catch(error){
+            console.log("Repo: Error in getUserById", error);
+            throw error;
+        }
+    }
 }
 
 export default UserRepository;

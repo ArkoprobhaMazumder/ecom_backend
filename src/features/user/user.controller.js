@@ -49,6 +49,20 @@ class UserController {
         }
     }
 
+    async showUser(req, res, next) {
+        const { id } = req.params;
+       try{
+            const user = await this.userRepository.getUserById(id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            return res.status(200).json({ data: user });
+       }catch(error){
+        console.log("Controller: Error in showUser", error);
+        res.status(500).json({ error: "An error occurred during show user controller" });
+       }
+    }
+
 
 }
 
