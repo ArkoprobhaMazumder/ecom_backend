@@ -40,7 +40,7 @@ class UserController {
                     const token=jwt.sign({ id: user._id, email: user.email, type: user.type },process.env.JWT_SECRET, { expiresIn: '1h' });
                     return res.status(200).cookie("userToken", token, {
                         maxAge: 60 * 60 * 1000
-                    }).send({ msg: "Login Successfull", cookie: token });
+                    }).send({ msg: "Login Successfull", cookie: token, data: user });
                 }
             }
         } catch (error) {
